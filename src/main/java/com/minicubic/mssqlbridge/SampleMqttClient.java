@@ -111,7 +111,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
 		connOpt = new MqttConnectOptions();
 		
 		connOpt.setCleanSession(true);
-		connOpt.setKeepAliveInterval(30);
+		connOpt.setKeepAliveInterval(300);
 		connOpt.setConnectionTimeout(60);
 		connOpt.setAutomaticReconnect(true);
 		Properties props = new Properties();
@@ -157,20 +157,6 @@ public class SampleMqttClient implements MqttCallbackExtended {
         } catch (MqttException e) {
             e.printStackTrace();
         }
-
-
-		try {
-			Thread.sleep(1000000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		
-		// disconnect
-		try {
-			myClient.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void deliveryComplete(IMqttDeliveryToken token) {
