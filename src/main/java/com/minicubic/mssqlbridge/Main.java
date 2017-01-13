@@ -80,40 +80,40 @@ public class Main implements MqttCallback {
             log.info("Recepcionando mensaje...");
             log.info("Topico: " + topic);
             log.info("Mensaje: " + message.getPayload().toString());
-            UserService userSvc = new UserService();
-            if (topic.contains("/login")) {
-                Type listType = new TypeToken<Request<UsuarioDTO>>(){}.getType();
-                Request<UsuarioDTO> request = gson.fromJson(message.toString(), listType);
-                UsuarioDTO usuario = request.getData();
-
-                Response<UsuarioDTO> response = userSvc.doLogin(usuario.getUser(), usuario.getPasswd());
-                if (client.isConnected()) {
-                    client.publish("loginResponse", new MqttMessage(gson.toJson(response).getBytes()));
-                }else{
-                    reconectar();
-                    client.publish("loginResponse", new MqttMessage(gson.toJson(response).getBytes()));
-                }            
-            } else if (topic.contains("/list")) {
-                log.info("Obteniendo Hoja de Ruta...");
-                Type listType = new TypeToken<Request<GestionHojaRuta>>(){}.getType();
-                Request<GestionHojaRuta> request = gson.fromJson(message.toString(), listType);
-                GestionHojaRuta gestionHojaRuta = request.getData();
-                Integer userId = gestionHojaRuta.getU_id();
-
-    //            String strMsg = userSvc.getList(userId);
-    //            this.output(topic, strMsg);
-                System.out.print(userSvc.getList(userId));
-            } else if (topic.contains("/detail")) {
-
-                Integer materialId = new Integer(topic.split("/")[3]);
-
-                //String strMsg = userSvc.getDetail(materialId);
-                //this.output(topic, strMsg);
-                System.out.print(userSvc.getDetail(materialId));
-            } else {
-
-                this.output(topic, new String(message.getPayload()));
-            }
+//            UserService userSvc = new UserService();
+//            if (topic.contains("/login")) {
+//                Type listType = new TypeToken<Request<UsuarioDTO>>(){}.getType();
+//                Request<UsuarioDTO> request = gson.fromJson(message.toString(), listType);
+//                UsuarioDTO usuario = request.getData();
+//
+//                Response<UsuarioDTO> response = userSvc.doLogin(usuario.getUser(), usuario.getPasswd());
+//                if (client.isConnected()) {
+//                    client.publish("loginResponse", new MqttMessage(gson.toJson(response).getBytes()));
+//                }else{
+//                    reconectar();
+//                    client.publish("loginResponse", new MqttMessage(gson.toJson(response).getBytes()));
+//                }            
+//            } else if (topic.contains("/list")) {
+//                log.info("Obteniendo Hoja de Ruta...");
+//                Type listType = new TypeToken<Request<GestionHojaRuta>>(){}.getType();
+//                Request<GestionHojaRuta> request = gson.fromJson(message.toString(), listType);
+//                GestionHojaRuta gestionHojaRuta = request.getData();
+//                Integer userId = gestionHojaRuta.getU_id();
+//
+//    //            String strMsg = userSvc.getList(userId);
+//    //            this.output(topic, strMsg);
+//                System.out.print(userSvc.getList(userId));
+//            } else if (topic.contains("/detail")) {
+//
+//                Integer materialId = new Integer(topic.split("/")[3]);
+//
+//                //String strMsg = userSvc.getDetail(materialId);
+//                //this.output(topic, strMsg);
+//                System.out.print(userSvc.getDetail(materialId));
+//            } else {
+//
+//                this.output(topic, new String(message.getPayload()));
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
