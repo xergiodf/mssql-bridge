@@ -185,36 +185,46 @@ public class SampleMqttClient implements MqttCallbackExtended {
 
                 Response<UsuarioDTO> response = userSvc.doLogin(usuario.getUser(), usuario.getPasswd());
                 myClient.publish("loginResponse", new MqttMessage(gson.toJson(response).getBytes()));
-            } else if (topic.contains("/listHojaRuta")) {
+            } else if (topic.contains("/listHojaRutaRequest")) {
                 
                 LOG.info("Obteniendo Hojas de Ruta...");
                 Type listType = new TypeToken<Request<HojaRuta>>() {
                 }.getType();
                 Request<HojaRuta> request = gson.fromJson(message.toString(), listType);
                 HojaRuta hojaRuta = request.getData();
-                Integer userId = 123; // Como obtengo?
+                Integer userId = hojaRuta.getUserId();
                 Response<List<HojaRuta>> response = userSvc.getListHojaRuta(userId);
-                myClient.publish("listResponse", new MqttMessage(gson.toJson(response).getBytes()));
-            } else if (topic.contains("/listGestiones")) {
+                myClient.publish("listHojaRutaResponse", new MqttMessage(gson.toJson(response).getBytes()));
+            } else if (topic.contains("/listGestionesRequest")) {
                 
                 LOG.info("Obteniendo Gestiones...");
                 Type listType = new TypeToken<Request<Gestion>>() {
                 }.getType();
                 Request<Gestion> request = gson.fromJson(message.toString(), listType);
                 Gestion gestion = request.getData();
-                Integer hojaRutaId = 123; // Como obtengo?
+                Integer hojaRutaId = gestion.getHojaRutaId();
                 Response<List<Gestion>> response = userSvc.getListGestion(hojaRutaId);
-                myClient.publish("listResponse", new MqttMessage(gson.toJson(response).getBytes()));
-            }   else if (topic.contains("/detail")) {
+                myClient.publish("listGestionesResponse", new MqttMessage(gson.toJson(response).getBytes()));
+            }   else if (topic.contains("/detailRequest")) {
 
-                LOG.info("Obteniendo Hoja de Ruta...");
+                LOG.info("Obteniendo Detalle...");
                 Type listType = new TypeToken<Request<Detalle>>() {
                 }.getType();
                 Request<Detalle> request = gson.fromJson(message.toString(), listType);
                 Detalle detalle = request.getData();
-                Integer gestionId = 123; // Como obtengo?
-                Response<List<Gestion>> response = userSvc.getListGestion(gestionId);
-                myClient.publish("listResponse", new MqttMessage(gson.toJson(response).getBytes()));
+                Integer gestionId = detalle.getGestionId();
+                Response<List<Detalle>> response = userSvc.getListDetalle(gestionId);
+                myClient.publish("detailResponse", new MqttMessage(gson.toJson(response).getBytes()));
+            } else if ( topic.contains("/updateEstadoRequest") ) {
+                
+                LOG.info("Actualizando Estado Gestion");
+                Type listType = new TypeToken<Request<Gestion>>() {
+                }.getType();
+                Request<Gestion> request = gson.fromJson(message.toString(), listType);
+                Gestion gestion = request.getData();
+                Integer gestionId = gestion.getId();
+                Response<List<Gestion>> response = userSvc.updateGestionEstado(gestionId);
+                myClient.publish("updateEstadoResponse", new MqttMessage(gson.toJson(response).getBytes()));
             }
         } catch (Exception e) {
             e.printStackTrace();

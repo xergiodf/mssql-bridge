@@ -24,4 +24,8 @@ public class HojaRuta {
     @Setter
     private String zona;
     
+    @Getter
+    @Setter
+    private Integer userId;
+    
 }

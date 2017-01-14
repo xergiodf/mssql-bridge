@@ -24,4 +24,8 @@ public class Gestion {
     @Getter
     @Setter
     private String descripcion;
+    
+    @Getter
+    @Setter
+    private Integer hojaRutaId;
 }

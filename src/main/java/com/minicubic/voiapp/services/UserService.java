@@ -22,7 +22,7 @@ public class UserService {
 
     private final DBUtil dbUtil;
     Gson gson = new GsonBuilder().create();
-    Logger log = Logger.getLogger("UserService");
+    static final Logger LOG = Logger.getLogger("UserService");
 
     public UserService() {
         dbUtil = new DBUtil();
@@ -31,10 +31,10 @@ public class UserService {
     public Response<UsuarioDTO> doLogin(String user, String passwd) {
         Response<UsuarioDTO> response = new Response<>();
         try {
-            log.info("User: " + user);
-            log.info("Password: " + passwd);
+//            LOG.info("User: " + user);
+//            LOG.info("Password: " + passwd);
             String json = dbUtil.resultSetToJson(Query.LOGIN_SQL, new Object[]{user, passwd});
-            log.info("JSON: " + json);
+//            LOG.info("JSON: " + json);
             List<UsuarioDTO> usuario = gson.fromJson(json, new TypeToken<List<UsuarioDTO>>() {
             }.getType());
 
@@ -60,7 +60,7 @@ public class UserService {
             response.setCodigo(200);
             response.setData(lista);
             response.setMensaje("Success");
-            log.info("success...");
+            LOG.info("success...");
             return response;
         } catch (Exception ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,7 +80,7 @@ public class UserService {
             response.setCodigo(200);
             response.setData(lista);
             response.setMensaje("Success");
-            log.info("success...");
+            LOG.info("success...");
             return response;
         } catch (Exception ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,7 +100,23 @@ public class UserService {
             response.setCodigo(200);
             response.setData(lista);
             response.setMensaje("Success");
-            log.info("success...");
+            LOG.info("success...");
+            return response;
+        } catch (Exception ex) {
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCodigo(600);
+            response.setMensaje(ex.getMessage());
+            return response;
+        }
+    }
+    
+    public Response updateGestionEstado(Integer id) {
+        Response<List<Detalle>> response = new Response<>();
+        try {    
+            dbUtil.resultSetToJson(Query.UPDATE_GESTION_SQL, new Object[]{id});
+            response.setCodigo(200);
+            response.setMensaje("Success");
+            LOG.info("success...");
             return response;
         } catch (Exception ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,12 +126,12 @@ public class UserService {
         }
     }
 
-    public String getDetail(Integer materialId) {
-        try {
-            return dbUtil.resultSetToJson(Query.getDetailSQL(materialId), null);
-        } catch (Exception ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
-            return "{\"error\":\"error_detail\"}";
-        }
-    }
+//    public String getDetail(Integer materialId) {
+//        try {
+//            return dbUtil.resultSetToJson(Query.getDetailSQL(materialId), null);
+//        } catch (Exception ex) {
+//            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+//            return "{\"error\":\"error_detail\"}";
+//        }
+//    }
 }

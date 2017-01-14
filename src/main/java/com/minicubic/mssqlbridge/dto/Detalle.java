@@ -44,4 +44,8 @@ public class Detalle {
     @Getter
     @Setter
     private String detalle;
+    
+    @Getter
+    @Setter
+    private Integer gestionId;
 }
