@@ -1,14 +1,7 @@
 package com.minicubic.mssqlbridge;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.minicubic.mssqlbridge.dto.GestionHojaRuta;
-import com.minicubic.mssqlbridge.dto.Request;
-import com.minicubic.mssqlbridge.dto.Response;
-import com.minicubic.mssqlbridge.dto.UsuarioDTO;
 import com.minicubic.mssqlbridge.util.DBUtil;
-import com.minicubic.voiapp.services.UserService;
-import java.lang.reflect.Type;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;

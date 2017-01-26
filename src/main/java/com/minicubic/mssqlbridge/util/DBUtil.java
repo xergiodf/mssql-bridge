@@ -32,4 +32,23 @@ public class DBUtil {
         }
         return new Gson().toJson(listOfMaps);
     }
+    
+    public void executeQuery(String query, Object[] params) throws Exception {
+        ConnectionUtil util = new ConnectionUtil();
+        Connection connection = util.getConnection();
+
+        try {
+            QueryRunner queryRunner = new QueryRunner();
+            if ( params == null ) {
+                queryRunner.update(connection, query);
+            } else {
+                queryRunner.update(connection, query, params);
+            }
+            
+        } catch (SQLException se) {
+            throw new RuntimeException("Couldn't query the database.", se);
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+    }
 }

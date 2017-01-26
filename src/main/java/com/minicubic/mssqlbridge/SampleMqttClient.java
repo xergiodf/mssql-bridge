@@ -21,6 +21,7 @@ import com.minicubic.mssqlbridge.dto.Detalle;
 import com.minicubic.mssqlbridge.dto.Gestion;
 import com.minicubic.mssqlbridge.dto.GestionHojaRuta;
 import com.minicubic.mssqlbridge.dto.HojaRuta;
+import com.minicubic.mssqlbridge.dto.Motivo;
 import com.minicubic.mssqlbridge.dto.Request;
 import com.minicubic.mssqlbridge.dto.Response;
 import com.minicubic.mssqlbridge.dto.UsuarioDTO;
@@ -228,6 +229,11 @@ public class SampleMqttClient implements MqttCallbackExtended {
                 Integer gestionId = gestion.getId();
                 Response<List<Gestion>> response = userSvc.updateGestionEstado(gestionId);
                 myClient.publish("updateEstadoResponse", new MqttMessage(gson.toJson(response).getBytes()));
+            } else if ( topic.contains("/listMotivosRequest") ) {
+                
+                LOG.info("List Motivos Request");
+                Response<List<Motivo>> response = userSvc.listMotivos();
+                myClient.publish("listMotivosResponse", new MqttMessage(gson.toJson(response).getBytes()));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.minicubic.mssqlbridge.dto.Detalle;
 import com.minicubic.mssqlbridge.dto.Gestion;
 import com.minicubic.mssqlbridge.dto.HojaRuta;
+import com.minicubic.mssqlbridge.dto.Motivo;
 import com.minicubic.mssqlbridge.dto.Response;
 import com.minicubic.mssqlbridge.dto.UsuarioDTO;
 import com.minicubic.mssqlbridge.util.DBUtil;
@@ -113,7 +114,7 @@ public class UserService {
     public Response updateGestionEstado(Integer id) {
         Response<List<Detalle>> response = new Response<>();
         try {    
-            dbUtil.resultSetToJson(Query.UPDATE_GESTION_SQL, new Object[]{id});
+            dbUtil.executeQuery(Query.UPDATE_GESTION_SQL, new Object[]{id});
             response.setCodigo(200);
             response.setMensaje("Success");
             LOG.info("success...");
@@ -125,13 +126,24 @@ public class UserService {
             return response;
         }
     }
+    
+    public Response<List<Motivo>> listMotivos() {
+        Response<List<Motivo>> response = new Response<>();
+        try {
+            String json = dbUtil.resultSetToJson(Query.getMotivoListSQL(), null);
 
-//    public String getDetail(Integer materialId) {
-//        try {
-//            return dbUtil.resultSetToJson(Query.getDetailSQL(materialId), null);
-//        } catch (Exception ex) {
-//            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
-//            return "{\"error\":\"error_detail\"}";
-//        }
-//    }
+            List<Motivo> lista = gson.fromJson(json, new TypeToken<List<Motivo>>() {
+            }.getType());
+            response.setCodigo(200);
+            response.setData(lista);
+            response.setMensaje("List Motivos OK");
+            LOG.info("List Motivos OK");
+            return response;
+        } catch (Exception ex) {
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCodigo(600);
+            response.setMensaje(ex.getMessage());
+            return response;
+        }
+    }
 }
