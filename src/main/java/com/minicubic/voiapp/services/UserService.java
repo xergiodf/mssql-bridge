@@ -122,11 +122,11 @@ public class UserService {
             } else {
                 
                 // Actualizar estado de gestion
-                dbUtil.executeQuery(Query.UPDATE_GESTION_ENTREGADO_SQL, new Object[]{motivoId, id});
+                dbUtil.executeQuery(Query.UPDATE_GESTION_NOENTREGADO_SQL, new Object[]{motivoId, id});
             }
             
             // Generar registro historico 
-            dbUtil.executeQuery(Query.INSERT_HISTORICO_SQL, new Object[]{userId, comentario, id});
+            dbUtil.executeQuery(Query.INSERT_HISTORICO_SQL, new Object[]{userId, comentario, id, id, id, id, id});
 
             response.setCodigo(200);
             response.setMensaje("Success");
