@@ -226,8 +226,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
                 }.getType();
                 Request<Gestion> request = gson.fromJson(message.toString(), listType);
                 Gestion gestion = request.getData();
-                Integer gestionId = gestion.getId();
-                Response<List<Gestion>> response = userSvc.updateGestionEstado(gestionId);
+                Response<List<Gestion>> response = userSvc.updateGestionEstado(gestion.getId(), gestion.getUserId(), gestion.getEntregado(), gestion.getMotivoId(), gestion.getComentario());
                 myClient.publish("updateEstadoResponse", new MqttMessage(gson.toJson(response).getBytes()));
             } else if ( topic.contains("/listMotivosRequest") ) {
                 

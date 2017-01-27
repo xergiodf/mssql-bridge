@@ -28,4 +28,20 @@ public class Gestion {
     @Getter
     @Setter
     private Integer hojaRutaId;
+    
+    @Getter
+    @Setter
+    private Boolean entregado;
+    
+    @Getter
+    @Setter
+    private Integer motivoId;
+    
+    @Getter
+    @Setter
+    private String comentario;
+    
+    @Getter
+    @Setter
+    private Integer userId;
 }

@@ -48,16 +48,4 @@ public class Detalle {
     @Getter
     @Setter
     private Integer gestionId;
-    
-    @Getter
-    @Setter
-    private Integer estadoGestion;
-    
-    @Getter
-    @Setter
-    private Integer motivo;
-    
-    @Getter
-    @Setter
-    private String comentario;
 }

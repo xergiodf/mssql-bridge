@@ -55,7 +55,7 @@ public class UserService {
         Response<List<HojaRuta>> response = new Response<>();
         try {
             String json = dbUtil.resultSetToJson(Query.getListSQLHojaRuta(userId), null);
-            
+
             List<HojaRuta> lista = gson.fromJson(json, new TypeToken<List<HojaRuta>>() {
             }.getType());
             response.setCodigo(200);
@@ -90,7 +90,7 @@ public class UserService {
             return response;
         }
     }
-    
+
     public Response<List<Detalle>> getListDetalle(Integer gestionId) {
         Response<List<Detalle>> response = new Response<>();
         try {
@@ -110,11 +110,24 @@ public class UserService {
             return response;
         }
     }
-    
-    public Response updateGestionEstado(Integer id) {
+
+    public Response updateGestionEstado(Integer id, Integer userId, Boolean entregado, Integer motivoId, String comentario) {
         Response<List<Detalle>> response = new Response<>();
-        try {    
-            dbUtil.executeQuery(Query.UPDATE_GESTION_SQL, new Object[]{id});
+        try {
+
+            if (entregado) {
+                // Actualizar estado de gestion
+                dbUtil.executeQuery(Query.UPDATE_GESTION_ENTREGADO_SQL, new Object[]{id});
+
+            } else {
+                
+                // Actualizar estado de gestion
+                dbUtil.executeQuery(Query.UPDATE_GESTION_ENTREGADO_SQL, new Object[]{motivoId, id});
+            }
+            
+            // Generar registro historico 
+            dbUtil.executeQuery(Query.INSERT_HISTORICO_SQL, new Object[]{userId, comentario, id});
+
             response.setCodigo(200);
             response.setMensaje("Success");
             LOG.info("success...");
@@ -126,7 +139,7 @@ public class UserService {
             return response;
         }
     }
-    
+
     public Response<List<Motivo>> listMotivos() {
         Response<List<Motivo>> response = new Response<>();
         try {
