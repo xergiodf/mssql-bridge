@@ -81,7 +81,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
             ///zString myTopic = M2MIO_DOMAIN + "/" + M2MIO_STUFF + "/" + M2MIO_THING;
             ///myClient.subscribe(M2MIO_REPLYTO_TOPIC, 0);
             ///myClient.subscribe(M2MIO_CLIENTNAME_TOPIC, 0);
-            myClient.subscribe("/api/#", 0);
+            myClient.subscribe("/api/#", 1);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -95,11 +95,8 @@ public class SampleMqttClient implements MqttCallbackExtended {
      * @param args
      */
     public static void main(String[] args) {
-        Thread t = new Thread(() -> {
             SampleMqttClient smc = new SampleMqttClient();
             smc.runClient();
-        });
-        t.start();
     }
 
     /**
@@ -114,8 +111,6 @@ public class SampleMqttClient implements MqttCallbackExtended {
         connOpt = new MqttConnectOptions();
 
         connOpt.setCleanSession(true);
-        connOpt.setKeepAliveInterval(300);
-        connOpt.setConnectionTimeout(60);
         connOpt.setAutomaticReconnect(true);
         Properties props = new Properties();
         connOpt.setSSLProperties(props);
@@ -142,14 +137,14 @@ public class SampleMqttClient implements MqttCallbackExtended {
             System.out.println("Connection attempt! To: " + brokerList[0]);
             myClient.connect(connOpt);
             System.out.println("Blocking for known issue: #233");
-            sync.doWait((long) 1 * 1000);
+            sync.doWait((long) 1);
             System.out.println("Received initial connection signal, continuing");
         } catch (MqttException ex) {
             // TODO Auto-generated catch block
             ex.printStackTrace();
         }
 
-        String myTopic = M2MIO_DOMAIN + "/" + M2MIO_STUFF + "/" + M2MIO_THING;
+        /*String myTopic = M2MIO_DOMAIN + "/" + M2MIO_STUFF + "/" + M2MIO_THING;
         MqttMessage message = new MqttMessage("TEST MESSAGE".getBytes());
         message.setQos(0);
         try {
@@ -157,7 +152,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
             myClient.publish(myTopic, message);
         } catch (MqttException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public void deliveryComplete(IMqttDeliveryToken token) {
@@ -189,6 +184,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
 
                 Response<UsuarioDTO> response = userSvc.doLogin(usuario.getUser(), usuario.getPasswd());
                 myClient.publish("loginResponse", new MqttMessage(gson.toJson(response).getBytes()));
+                myClient.close();
             } else if (topic.contains("/listHojaRutaRequest")) {
                 
                 LOG.info("Obteniendo Hojas de Ruta...");
@@ -199,6 +195,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
                 Integer userId = hojaRuta.getUserId();
                 Response<List<HojaRuta>> response = userSvc.getListHojaRuta(userId);
                 myClient.publish("listHojaRutaResponse", new MqttMessage(gson.toJson(response).getBytes()));
+                myClient.close();
             } else if (topic.contains("/listGestionesRequest")) {
                 
                 LOG.info("Obteniendo Gestiones...");
@@ -209,6 +206,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
                 Integer hojaRutaId = gestion.getHojaRutaId();
                 Response<List<Gestion>> response = userSvc.getListGestion(hojaRutaId);
                 myClient.publish("listGestionesResponse", new MqttMessage(gson.toJson(response).getBytes()));
+                myClient.close();
             }   else if (topic.contains("/detailRequest")) {
 
                 LOG.info("Obteniendo Detalle...");
@@ -219,6 +217,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
                 Integer gestionId = detalle.getGestionId();
                 Response<List<Detalle>> response = userSvc.getListDetalle(gestionId);
                 myClient.publish("detailResponse", new MqttMessage(gson.toJson(response).getBytes()));
+                myClient.close();
             } else if ( topic.contains("/updateEstadoRequest") ) {
                 
                 LOG.info("Actualizando Estado Gestion");
@@ -227,12 +226,15 @@ public class SampleMqttClient implements MqttCallbackExtended {
                 Request<Gestion> request = gson.fromJson(message.toString(), listType);
                 Gestion gestion = request.getData();
                 Response<List<Gestion>> response = userSvc.updateGestionEstado(gestion.getId(), gestion.getUserId(), gestion.getEntregado(), gestion.getMotivoId(), gestion.getComentario());
+            
                 myClient.publish("updateEstadoResponse", new MqttMessage(gson.toJson(response).getBytes()));
+                myClient.close();
             } else if ( topic.contains("/listMotivosRequest") ) {
                 
                 LOG.info("List Motivos Request");
                 Response<List<Motivo>> response = userSvc.listMotivos();
                 myClient.publish("listMotivosResponse", new MqttMessage(gson.toJson(response).getBytes()));
+                myClient.close();
             }
         } catch (Exception e) {
             e.printStackTrace();

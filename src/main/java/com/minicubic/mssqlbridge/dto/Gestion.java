@@ -44,4 +44,13 @@ public class Gestion {
     @Getter
     @Setter
     private Integer userId;
+    
+    @Getter
+    @Setter
+    private String nombre_apellido;
+    
+    
+    @Getter
+    @Setter
+    private String direccion_entrega;
 }

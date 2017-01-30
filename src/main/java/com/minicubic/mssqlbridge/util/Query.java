@@ -16,7 +16,7 @@ public class Query {
     }
     
     public static final String getListSQLGestion(Integer hojaRutaId) {
-        return "select distinct g.id, m.numero_guia, m.numero_orden, m.codigo_barra, eg.descripcion from gestiones g join materiales m on ( g.id_material = m.id ) join estados_gestiones eg on ( g.id_estado = eg.id ) join gestiones_hojas_de_ruta ghr on ( g.id = ghr.id_gestion ) join hojas_de_ruta hr on ( ghr.id_hoja_ruta = hr.id ) join usuarios u on ( hr.id_usuario_mensajero = u.id ) where g.id_resultado = 6 and g.id_estado = 4 and hr.id = " + hojaRutaId + " order by m.codigo_barra; ";
+        return "select distinct g.id, m.numero_guia, m.numero_orden, m.codigo_barra, eg.descripcion, m.nombre_apellido, m.direccion_entrega from gestiones g join materiales m on ( g.id_material = m.id ) join estados_gestiones eg on ( g.id_estado = eg.id ) join gestiones_hojas_de_ruta ghr on ( g.id = ghr.id_gestion ) join hojas_de_ruta hr on ( ghr.id_hoja_ruta = hr.id ) join usuarios u on ( hr.id_usuario_mensajero = u.id ) where g.id_resultado = 6 and g.id_estado = 4 and hr.id = " + hojaRutaId + " order by m.codigo_barra; ";
     }
     
     public static final String getDetailSQL(Integer gestionId) {
