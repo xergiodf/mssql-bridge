@@ -81,7 +81,7 @@ public class SampleMqttClient implements MqttCallbackExtended {
             ///zString myTopic = M2MIO_DOMAIN + "/" + M2MIO_STUFF + "/" + M2MIO_THING;
             ///myClient.subscribe(M2MIO_REPLYTO_TOPIC, 0);
             ///myClient.subscribe(M2MIO_CLIENTNAME_TOPIC, 0);
-            myClient.subscribe("/api/#", 1);
+            myClient.subscribe("/api/#", 2);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

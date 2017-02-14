@@ -63,7 +63,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.minicubic.mssqlbridge.SampleMqttClient</mainClass>
+                            <mainClass>com.minicubic.mssqlbridge.BrokerMQTTClient</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
